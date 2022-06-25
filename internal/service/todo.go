@@ -1,14 +1,14 @@
 package service
 
 import (
-	"webservice/internals/repository"
+	"webservice/internal/repository"
 )
 
 type ToDoService struct {
 	repository *repository.ToDoRepository
 }
 
-func NewUsersProcessor(storage *repository.ToDoRepository) *ToDoService {
+func NewUsersService(storage *repository.ToDoRepository) *ToDoService {
 	processor := new(ToDoService)
 	processor.repository = storage
 	return processor

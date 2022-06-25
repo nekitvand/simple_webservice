@@ -1,8 +1,11 @@
-package handlers
+package handler
 
 import (
-	"webservice/internals/service"
+	"encoding/json"
+	"fmt"
 	"net/http"
+	"webservice/internal/model"
+	"webservice/internal/service"
 )
 
 
@@ -17,7 +20,13 @@ func NewToDoHandler(service *service.ToDoService) *ToDoHandler {
 }
 
 func (handler *ToDoHandler) Create(w http.ResponseWriter, r *http.Request) {
-	
+	var newToDo model.ToDoModel
+
+	err := json.NewDecoder(r.Body).Decode(&newToDo)
+	if err != nil {
+		WrapError(w, err)
+	fmt.Println(&newToDo)
+	}
 }
 
 

@@ -1,11 +1,15 @@
 package app
 
 import (
-	"webservice/internals/cfg"
-	_ "github.com/jackc/pgx/v4/stdlib"
-	"github.com/jmoiron/sqlx"
 	"log"
 	"net/http"
+	"webservice/api"
+	"webservice/internal/cfg"
+	"webservice/internal/handler"
+	"webservice/internal/repository"
+	"webservice/internal/service"
+	_ "github.com/jackc/pgx/v4/stdlib"
+	"github.com/jmoiron/sqlx"
 )
 
 type AppServer struct {
@@ -22,17 +26,21 @@ func NewServer(config cfg.Cfg) *AppServer {
 
 func (server *AppServer) Start() {
 	var err error
-	server.db, err = sqlx.Open("pgx",server.config.GetDBString())
+	server.db, err = sqlx.Open("pgx", server.config.GetDBString())
 	if err != nil {
 		log.Fatalln(err)
 	}
 	server.db.SetMaxIdleConns(10)
 	server.db.SetMaxOpenConns(10)
 
-	
+	todoRepository := repository.NewToDoRepository(server.db)
+	todoService := service.NewUsersService(todoRepository)
+	todoHandler := handler.NewToDoHandler(todoService)
+	route := api.CreateRoutes(todoHandler)
+
 	server.srv = &http.Server{
 		Addr:    ":" + server.config.Port,
-		// Handler: routes,
+		Handler: route,
 	}
 
 	log.Println("Server started")
@@ -42,7 +50,7 @@ func (server *AppServer) Start() {
 		log.Fatalln(err)
 	}
 
-	return 
+	return
 }
 
 func (server *AppServer) Shutdown() {

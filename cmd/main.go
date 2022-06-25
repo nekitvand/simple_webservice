@@ -1,8 +1,8 @@
 package main
 
 import (
-	"webservice/internals/app"
-	"webservice/internals/cfg"
+	"webservice/internal/app"
+	"webservice/internal/cfg"
 )
 
 func main() { 
