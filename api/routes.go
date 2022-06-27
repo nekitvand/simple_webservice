@@ -8,6 +8,6 @@ import (
 
 func CreateRoutes(toDoHandler *handler.ToDoHandler) *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/todo/create", toDoHandler.Create).Methods("POST")
+	r.HandleFunc("/todo/create", toDoHandler.CreateToDo).Methods("POST")
 	return r
 }
