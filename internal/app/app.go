@@ -8,8 +8,10 @@ import (
 	"webservice/internal/handler"
 	"webservice/internal/repository"
 	"webservice/internal/service"
+
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/jmoiron/sqlx"
+	"github.com/pressly/goose/v3"
 )
 
 type AppServer struct {
@@ -32,6 +34,9 @@ func (server *AppServer) Start() {
 	}
 	server.db.SetMaxIdleConns(10)
 	server.db.SetMaxOpenConns(10)
+	if err := goose.Up(server.db.DB,"/var"); err != nil {
+		panic(err)
+	}
 
 	todoRepository := repository.NewToDoRepository(server.db)
 	todoService := service.NewUsersService(todoRepository)
@@ -48,9 +53,7 @@ func (server *AppServer) Start() {
 	err = server.srv.ListenAndServe()
 	if err != nil && err != http.ErrServerClosed {
 		log.Fatalln(err)
-	}
-
-	return
+	} 
 }
 
 func (server *AppServer) Shutdown() {
