@@ -42,3 +42,19 @@ func (handler *ToDoHandler) CreateToDo(w http.ResponseWriter, r *http.Request) {
 }	
 
 
+func (handler *ToDoHandler) GetAllToDo(w http.ResponseWriter, r *http.Request) {
+
+	todo_list, err := handler.service.GetAllToDo()
+	if err != nil {
+		WrapError(w, err)
+		return
+	}
+
+	var response = map[string]interface{} {
+		"result": todo_list,
+	}
+
+	WrapOK(w,response)
+}	
+
+

@@ -11,9 +11,9 @@ type ToDoService struct {
 }
 
 func NewUsersService(repository *repository.ToDoRepository) *ToDoService {
-	processor := new(ToDoService)
-	processor.repository = repository
-	return processor
+	service := new(ToDoService)
+	service.repository = repository
+	return service
 }
 
 func (service *ToDoService) CreateToDo (todo model.ToDoModel) error {
@@ -25,4 +25,17 @@ func (service *ToDoService) CreateToDo (todo model.ToDoModel) error {
 
 	}
 	return service.repository.CreateToDo(todo)
+}
+
+func (service *ToDoService) GetAllToDo() ([]model.ToDoModel,error) {
+	todo_list,err := service.repository.GetAllToDo()
+	
+	if err != nil {
+		return nil, errors.New("ошибка получения данных")
+	}
+	if len(todo_list) == 0 {
+		return todo_list, errors.New("нет записей в базе")
+	}
+
+	return todo_list, nil
 }

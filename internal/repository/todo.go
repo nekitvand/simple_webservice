@@ -29,3 +29,20 @@ func (repository *ToDoRepository) CreateToDo (todo model.ToDoModel) error {
 
 	return nil
 }
+
+func (repository *ToDoRepository) GetAllToDo() ([]model.ToDoModel,error) {
+	query := "SELECT id,title,text FROM todo"
+
+	var result []model.ToDoModel
+
+	err := repository.db.Select(&result, query)
+	
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	return result, nil
+
+}
