@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"webservice/internal/model"
 
@@ -45,4 +46,28 @@ func (repository *ToDoRepository) GetAllToDo() ([]model.ToDoModel,error) {
 
 	return result, nil
 
+}
+
+func (repository *ToDoRepository) UpdateFieldToDo(todo model.ToDoModel) error {
+	var query string
+	if todo.Text != "" {
+		query += fmt.Sprintf("text = '%v',",todo.Text)
+	}
+	if todo.Title != "" {
+		query +=  fmt.Sprintf("title = '%v'",todo.Title)
+	}
+	if query == "" {
+		return errors.New("нет значений для измнений")
+	}
+	
+	upd := fmt.Sprintf("UPDATE todo SET %s WHERE id = %d",query,todo.Id)
+
+	_, err := repository.db.Exec(upd)
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
 }
