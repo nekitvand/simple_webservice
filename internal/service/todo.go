@@ -39,3 +39,7 @@ func (service *ToDoService) GetAllToDo() ([]model.ToDoModel,error) {
 
 	return todo_list, nil
 }
+
+func (service *ToDoService) UpdateFieldToDo(todo model.ToDoModel) error {
+	return service.repository.UpdateFieldToDo(todo)
+}
