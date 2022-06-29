@@ -110,3 +110,22 @@ func (handler *ToDoHandler) UpdateToDo(w http.ResponseWriter, r *http.Request) {
 
 	WrapOK(w,response)
 }
+
+func (handler *ToDoHandler) DeleteToDo(w http.ResponseWriter, r *http.Request) {
+	var newToDo model.ToDoModel
+
+	newToDo.Id,_ = strconv.Atoi(mux.Vars(r)["id"])
+	
+	err := handler.service.DeleteToDo(newToDo)
+	if err != nil {
+		WrapError(w, err)
+		return
+	}
+
+	var response = map[string]interface{} {
+		"result": "OK",
+		"info" : "delete todo " + strconv.Itoa(newToDo.Id),
+	}
+
+	WrapOK(w,response)
+}
