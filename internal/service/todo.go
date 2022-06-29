@@ -43,3 +43,16 @@ func (service *ToDoService) GetAllToDo() ([]model.ToDoModel,error) {
 func (service *ToDoService) UpdateFieldToDo(todo model.ToDoModel) error {
 	return service.repository.UpdateFieldToDo(todo)
 }
+
+
+func (service *ToDoService) UpdateToDo(todo model.ToDoModel) error {
+
+	if todo.Text == "" {
+		return errors.New("text не указан")
+	}
+	if todo.Title == "" {
+		return errors.New("title не указан")
+	}
+
+	return service.repository.UpdateToDo(todo)
+}
