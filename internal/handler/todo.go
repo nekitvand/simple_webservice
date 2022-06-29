@@ -86,3 +86,27 @@ func (handler *ToDoHandler) UpdateFieldToDo(w http.ResponseWriter, r *http.Reque
 	WrapOK(w,response)
 }
 
+func (handler *ToDoHandler) UpdateToDo(w http.ResponseWriter, r *http.Request) {
+	var newToDo model.ToDoModel
+
+	err := json.NewDecoder(r.Body).Decode(&newToDo)
+	newToDo.Id,_ = strconv.Atoi(mux.Vars(r)["id"])
+	
+	if err != nil {
+		WrapError(w, err)
+		return
+	}
+
+	err = handler.service.UpdateToDo(newToDo)
+	if err != nil {
+		WrapError(w, err)
+		return
+	}
+
+	var response = map[string]interface{} {
+		"result": "OK",
+		"info" : "update todo " + strconv.Itoa(newToDo.Id),
+	}
+
+	WrapOK(w,response)
+}

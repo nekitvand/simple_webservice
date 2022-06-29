@@ -71,3 +71,15 @@ func (repository *ToDoRepository) UpdateFieldToDo(todo model.ToDoModel) error {
 
 	return nil
 }
+
+func (repository *ToDoRepository) UpdateToDo(todo model.ToDoModel) error {
+
+	_, err := repository.db.Exec("UPDATE todo SET title = $1,text = $2  WHERE id = $3",todo.Title,todo.Text,todo.Id)
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
+}
