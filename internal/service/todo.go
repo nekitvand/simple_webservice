@@ -56,3 +56,7 @@ func (service *ToDoService) UpdateToDo(todo model.ToDoModel) error {
 
 	return service.repository.UpdateToDo(todo)
 }
+
+func (service *ToDoService) DeleteToDo(todo model.ToDoModel) error {
+	return service.repository.DeleteToDo(todo)
+}
