@@ -9,7 +9,10 @@ import (
 	"webservice/internal/repository"
 	"webservice/internal/service"
 
+	_ "webservice/internal/migrations"
+
 	_ "github.com/jackc/pgx/v4/stdlib"
+	_ "github.com/lib/pq"
 	"github.com/jmoiron/sqlx"
 	"github.com/pressly/goose/v3"
 )
@@ -34,7 +37,9 @@ func (server *AppServer) Start() {
 	}
 	server.db.SetMaxIdleConns(10)
 	server.db.SetMaxOpenConns(10)
-	if err := goose.Up(server.db.DB,"/var"); err != nil {
+	log.Println("Migration start")
+	if err := goose.Up(server.db.DB,"/var"); 
+	err != nil {
 		panic(err)
 	}
 
@@ -53,7 +58,7 @@ func (server *AppServer) Start() {
 	err = server.srv.ListenAndServe()
 	if err != nil && err != http.ErrServerClosed {
 		log.Fatalln(err)
-	} 
+	}
 }
 
 func (server *AppServer) Shutdown() {

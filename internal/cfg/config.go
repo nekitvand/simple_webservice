@@ -2,6 +2,7 @@ package cfg
 
 import (
 	"fmt"
+
 	"github.com/spf13/viper"
 )
 
@@ -16,10 +17,9 @@ type Cfg struct {
 
 func LoadConfig() Cfg {
 	v := viper.New() 
-	v.SetEnvPrefix("SERV") 
 	v.SetDefault("PORT", "8080")
 	v.SetDefault("DBUSER", "postgres")
-	v.SetDefault("DBPASS", "1234")
+	v.SetDefault("DBPASS", "postgres")
 	v.SetDefault("DBHOST", "localhost")
 	v.SetDefault("DBPORT", "5432")
 	v.SetDefault("DBNAME", "postgres")
